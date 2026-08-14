@@ -1,0 +1,25 @@
+{
+  "repository": "https://github.com/vllm-project/vllm",
+  "tag": "v0.26.0",
+  "commit": "568afb3a13806beb53bb2e6bd518269357b237c0",
+  "license": "Apache-2.0",
+  "files": [
+    {
+      "path": "vllm/entrypoints/chat_utils.py",
+      "sha256": "16b9fd8c6ed75c8593778be2ddc5a56053259aec85f300063c607894381e28ec"
+    },
+    {
+      "path": "vllm/entrypoints/openai/chat_completion/protocol.py",
+      "sha256": "aea283940efbe7b8c91aed6e4e146a9d7f714095cf46c6df3080f00e05d3277c"
+    },
+    {
+      "path": "vllm/renderers/hf.py",
+      "sha256": "06f0fad8ed924ccb24434effb28b76c9e55303ca37dad331f39b62a4339edefc"
+    },
+    {
+      "path": "vllm/renderers/params.py",
+      "sha256": "3a551bcbda5d18c3258ab4a4c17db953e97c733badab9bd2157ff62726c73442"
+    }
+  ]
+}
+
