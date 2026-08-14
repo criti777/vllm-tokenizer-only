@@ -2,6 +2,7 @@ import json
 from pathlib import Path
 
 from tools.build_requests import build_combinatorial, build_handwritten
+from tools.import_ultrachat import select_ultrachat_records
 from vllm_text_oracle.jsonl import read_jsonl, write_jsonl_atomic
 
 
@@ -46,3 +47,24 @@ def test_jsonl_atomic_round_trip_preserves_text(tmp_path: Path) -> None:
     assert list(read_jsonl(destination)) == records
     raw = destination.read_text(encoding="utf-8")
     assert json.loads(raw)["request"]["messages"][0]["content"] == " x\r\n "
+
+
+def test_ultrachat_selection_is_hash_sorted_and_preserves_messages() -> None:
+    rows = [
+        {"prompt": "p2", "messages": [{"role": "user", "content": " x\r\n "}]},
+        {"prompt": "p1", "messages": [{"role": "user", "content": "你好"}]},
+        {"prompt": "p3", "messages": [{"role": "user", "content": "third"}]},
+    ]
+
+    first = select_ultrachat_records(rows, limit=2, source_shard="test.parquet")
+    second = select_ultrachat_records(rows, limit=2, source_shard="test.parquet")
+
+    assert first == second
+    assert len(first) == 2
+    assert [record["source"]["content_sha256"] for record in first] == sorted(
+        record["source"]["content_sha256"] for record in first
+    )
+    selected_contents = {
+        record["request"]["messages"][0]["content"] for record in first
+    }
+    assert selected_contents <= {" x\r\n ", "你好", "third"}

@@ -1,0 +1,19 @@
+{
+  "vllm": {
+    "repository": "https://github.com/vllm-project/vllm",
+    "revision": "568afb3a13806beb53bb2e6bd518269357b237c0",
+    "license": "Apache-2.0",
+    "license_file": "vendor/vllm/LICENSE"
+  },
+  "glm-5.2": {
+    "repository": "https://huggingface.co/zai-org/GLM-5.2",
+    "revision": "b4734de4facf877f85769a911abafc5283eab3d9",
+    "license": "MIT",
+    "license_file": "model_assets/zai-org--GLM-5.2/b4734de4facf877f85769a911abafc5283eab3d9/LICENSE"
+  },
+  "ultrachat-200k": {
+    "repository": "https://huggingface.co/datasets/HuggingFaceH4/ultrachat_200k",
+    "revision": "8049631c405ae6576f93f445c6b8166f76f5505a",
+    "license": "MIT"
+  }
+}

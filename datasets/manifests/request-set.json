@@ -1,0 +1,31 @@
+{
+  "version": 1,
+  "model": "zai-org/GLM-5.2",
+  "total_requests": 12300,
+  "files": {
+    "datasets/requests/handwritten.jsonl": {
+      "count": 300,
+      "sha256": "83857822007f14d5fb5b67f67c851f9b79eea4b78c3d85ee85a7d94b753b633d"
+    },
+    "datasets/requests/generated/combinatorial.jsonl": {
+      "count": 2000,
+      "generator": "combinatorial-v1",
+      "seed": 20260814,
+      "sha256": "66b534fc19344049995a40b92a606592c5cea98a6347ad1270eeb881fa33d453"
+    },
+    "datasets/requests/imported/ultrachat.jsonl": {
+      "count": 10000,
+      "sha256": "ed049a66987018dbf242a129bedd10f4bd585281bc19201cb1f191602097aef4",
+      "selection": "sort all valid records in the pinned source shard by canonical messages SHA-256 and source index, then take the first 10000"
+    }
+  },
+  "ultrachat_source": {
+    "dataset": "HuggingFaceH4/ultrachat_200k",
+    "revision": "8049631c405ae6576f93f445c6b8166f76f5505a",
+    "split": "train_sft",
+    "shard": "data/train_sft-00000-of-00003-a3ecf92756993583.parquet",
+    "shard_bytes": 243999189,
+    "shard_sha256": "afa8fa7426081b2a0e732fb50dbb5cd402a28ad5f0dbe66c0d996d63e7220727"
+  }
+}
+
