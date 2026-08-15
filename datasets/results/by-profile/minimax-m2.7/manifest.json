@@ -1,0 +1,58 @@
+{
+  "counts": {
+    "combinatorial": {
+      "error": 0,
+      "ok": 2000,
+      "total": 2000
+    },
+    "handwritten": {
+      "error": 36,
+      "ok": 264,
+      "total": 300
+    },
+    "ultrachat": {
+      "error": 0,
+      "ok": 1000,
+      "total": 1000
+    }
+  },
+  "dependencies": {
+    "huggingface-hub": "1.7.1",
+    "jinja2": "3.1.6",
+    "pydantic": "2.12.5",
+    "tiktoken": "0.12.0",
+    "tokenizers": "0.22.2",
+    "transformers": "5.13.1"
+  },
+  "files": {
+    "combinatorial.jsonl": {
+      "sha256": "87763967c41ace5e804c75a02c76f50f39f5b0d6fd88bb6dfa20d706372ce7ee",
+      "size": 2117899
+    },
+    "handwritten.jsonl": {
+      "sha256": "8c8b0fd76af4e81019502182bf9221d66f4456aa18b4859d4f8ff304f547ea26",
+      "size": 727862
+    },
+    "ultrachat.jsonl.gz": {
+      "content_sha256": "4c3dcf7ab2b31966ecd7ccd92cda0c61df39ef2edc4a4631bbb5ebbd88fbddaf",
+      "sha256": "d49e1a42d62c6433078be16a9073505881290142190ca343d8b3bb35a22436b0",
+      "size": 2070702
+    }
+  },
+  "model": {
+    "id": "MiniMaxAI/MiniMax-M2.7",
+    "revision": "d494266a4affc0d2995ba1fa35c8481cbd84294b"
+  },
+  "oracle_version": "0.1.0",
+  "profile_id": "minimax-m2.7",
+  "renderer": "hf",
+  "request_model_override": "MiniMaxAI/MiniMax-M2.7",
+  "schema_version": 2,
+  "selection": {
+    "ultrachat_limit": 1000
+  },
+  "vllm": {
+    "commit": "568afb3a13806beb53bb2e6bd518269357b237c0",
+    "tag": "v0.26.0"
+  }
+}
