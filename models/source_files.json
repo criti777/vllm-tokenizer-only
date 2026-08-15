@@ -1,0 +1,60 @@
+{
+  "deepseek-v3": [
+    "LICENSE-CODE",
+    "LICENSE-MODEL",
+    "config.json",
+    "tokenizer.json",
+    "tokenizer_config.json"
+  ],
+  "deepseek-v3.2": [
+    "LICENSE",
+    "config.json",
+    "generation_config.json",
+    "tokenizer.json",
+    "tokenizer_config.json"
+  ],
+  "deepseek-v4": [
+    "LICENSE",
+    "config.json",
+    "generation_config.json",
+    "tokenizer.json",
+    "tokenizer_config.json"
+  ],
+  "kimi-k2.6": [
+    "LICENSE",
+    "chat_template.jinja",
+    "config.json",
+    "generation_config.json",
+    "preprocessor_config.json",
+    "tiktoken.model",
+    "tokenization_kimi.py",
+    "tokenizer_config.json",
+    "tool_declaration_ts.py"
+  ],
+  "glm-5.1": [
+    "LICENSE",
+    "chat_template.jinja",
+    "config.json",
+    "generation_config.json",
+    "tokenizer.json",
+    "tokenizer_config.json"
+  ],
+  "glm-5.2": [
+    "LICENSE",
+    "chat_template.jinja",
+    "config.json",
+    "generation_config.json",
+    "tokenizer.json",
+    "tokenizer_config.json"
+  ],
+  "minimax-m2.7": [
+    "LICENSE",
+    "chat_template.jinja",
+    "config.json",
+    "generation_config.json",
+    "merges.txt",
+    "tokenizer.json",
+    "tokenizer_config.json",
+    "vocab.json"
+  ]
+}

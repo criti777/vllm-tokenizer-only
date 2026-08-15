@@ -102,11 +102,11 @@ def test_unknown_model_never_falls_back(registry):
 - Produces: `AssetStore.verify(profile) -> VerifiedAssets`, `fetch_profile(profile, destination)`.
 - `VerifiedAssets.tokenizer_path` is passed to renderer construction.
 
-- [ ] **Step 1: Test HTTP error, empty response, wrong hash, missing asset, extra untracked executable Python, and successful offline verification.**
-- [ ] **Step 2: Run the focused tests and confirm they fail before implementation.**
-- [ ] **Step 3: Implement atomic downloads, explicit status/size/hash checks, immutable revision URLs, and offline verification.**
-- [ ] **Step 4: Populate manifests from official repositories; inspect and hash only tokenizer/template/config files, never weights.**
-- [ ] **Step 5: Run integrity tests and `fetch_model_assets --model glm-5.2 --verify-only`; commit `feat: pin and verify model text assets`.**
+- [x] **Step 1: Test HTTP error, empty response, wrong hash, missing asset, extra untracked executable Python, and successful offline verification.**
+- [x] **Step 2: Run the focused tests and confirm they fail before implementation.**
+- [x] **Step 3: Implement atomic downloads, explicit status/size/hash checks, immutable revision URLs, and offline verification.**
+- [x] **Step 4: Populate manifests from official repositories; inspect and hash only tokenizer/template/config files, never weights.**
+- [x] **Step 5: Run integrity tests and `fetch_model_assets --model glm-5.2 --verify-only`; commit `feat: pin and verify model text assets`.**
 
 ### Task 4: Profile-Aware Unified Oracle
 
