@@ -70,6 +70,8 @@ def verify_asset_directory(manifest_path: Path, asset_path: Path) -> VerifiedAss
 
     for path in asset_path.rglob("*.py"):
         relative_name = path.relative_to(asset_path).as_posix()
+        if relative_name.startswith(".cache/"):
+            continue
         if relative_name not in tracked:
             raise AssetIntegrityError(f"untracked Python asset: {relative_name}")
 

@@ -4,6 +4,8 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from pathlib import Path
+from tempfile import TemporaryDirectory
+from threading import Lock
 from typing import Any
 
 from transformers import AutoTokenizer
@@ -11,6 +13,9 @@ from transformers import AutoTokenizer
 from vendor.vllm.extracted.hf_renderer import render_and_encode
 
 from .profiles import ModelProfile
+
+
+_REMOTE_CODE_LOCK = Lock()
 
 
 class RendererUnavailableError(RuntimeError):
@@ -31,8 +36,30 @@ class HFRenderer:
         self.tokenizer = tokenizer
 
     @classmethod
-    def from_local_assets(cls, path: Path) -> "HFRenderer":
-        tokenizer = AutoTokenizer.from_pretrained(path, local_files_only=True)
+    def from_local_assets(
+        cls, path: Path, *, trust_remote_code: bool = False
+    ) -> "HFRenderer":
+        if trust_remote_code:
+            import transformers.dynamic_module_utils as dynamic_modules
+
+            with _REMOTE_CODE_LOCK:
+                original_cache = dynamic_modules.HF_MODULES_CACHE
+                with TemporaryDirectory(prefix="vllm-oracle-hf-modules-") as cache:
+                    dynamic_modules.HF_MODULES_CACHE = cache
+                    try:
+                        tokenizer = AutoTokenizer.from_pretrained(
+                            path,
+                            local_files_only=True,
+                            trust_remote_code=True,
+                        )
+                    finally:
+                        dynamic_modules.HF_MODULES_CACHE = original_cache
+        else:
+            tokenizer = AutoTokenizer.from_pretrained(
+                path,
+                local_files_only=True,
+                trust_remote_code=False,
+            )
         return cls(tokenizer)
 
     def render(self, parsed: Any) -> RenderedPrompt:
@@ -59,7 +86,10 @@ class HFRenderer:
 
 def build_renderer(profile: ModelProfile, asset_path: Path) -> HFRenderer:
     if profile.renderer == "hf":
-        return HFRenderer.from_local_assets(asset_path)
+        return HFRenderer.from_local_assets(
+            asset_path,
+            trust_remote_code=profile.trust_remote_code,
+        )
     raise RendererUnavailableError(
         f"renderer {profile.renderer} is not installed for {profile.profile_id}"
     )

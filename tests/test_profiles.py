@@ -59,6 +59,16 @@ def test_resolves_declared_request_alias(registry: ModelRegistry) -> None:
     assert registry.resolve("zai-org/GLM-5.2").profile_id == "glm-5.2"
 
 
+def test_remote_tokenizer_code_is_enabled_only_for_kimi(registry: ModelRegistry) -> None:
+    enabled = tuple(
+        profile_id
+        for profile_id in registry.profile_ids
+        if registry.resolve(profile_id).trust_remote_code
+    )
+
+    assert enabled == ("kimi-k2.6",)
+
+
 def test_unknown_model_never_falls_back(registry: ModelRegistry) -> None:
     with pytest.raises(ProfileResolutionError, match="unknown model alias"):
         registry.resolve("deepseek-v99")

@@ -43,7 +43,13 @@ def _related_names(root: jinja2.nodes.Template, initial: str) -> list[str]:
 
 
 def detect_content_format(chat_template: str) -> str:
-    root = jinja2.Environment().parse(chat_template)
+    try:
+        import transformers.utils.chat_template_utils as hf_chat_utils
+
+        compiled = hf_chat_utils._compile_jinja_template(chat_template)
+        root = compiled.environment.parse(chat_template)
+    except Exception:
+        return "string"
     message_names: list[str] = []
     for loop in root.find_all(jinja2.nodes.For):
         if isinstance(loop.target, jinja2.nodes.Name) and any(
@@ -56,4 +62,3 @@ def detect_content_format(chat_template: str) -> str:
         if isinstance(loop.iter, jinja2.nodes.Name) and loop.iter.name == "content":
             return "openai"
     return "string"
-

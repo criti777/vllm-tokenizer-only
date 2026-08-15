@@ -32,6 +32,7 @@
     "repository": "moonshotai/Kimi-K2.6",
     "revision": "7eb5002f6aadc958aed6a9177b7ed26bb94011bb",
     "renderer": "hf",
+    "trust_remote_code": true,
     "asset_manifest": "models/manifests/kimi-k2.6.json",
     "capabilities": {"tools": true, "thinking": true, "content_parts": true}
   },

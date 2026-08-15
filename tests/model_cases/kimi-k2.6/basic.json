@@ -1,0 +1,4 @@
+{
+  "rendered_text": "<|im_user|>user<|im_middle|>你好, world 🌍<|im_end|><|im_assistant|>assistant<|im_middle|><think>",
+  "token_ids": [163587, 2482, 163601, 33845, 11, 2695, 17137, 44755, 163586, 163588, 69702, 163601, 163606]
+}

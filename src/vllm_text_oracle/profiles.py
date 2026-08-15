@@ -23,6 +23,7 @@ class ModelProfile(BaseModel):
     repository: str = Field(pattern=r"^[^/]+/[^/]+$")
     revision: str = Field(pattern=r"^[0-9a-f]{40}$")
     renderer: RendererName
+    trust_remote_code: bool = False
     asset_manifest: str = Field(min_length=1)
     capabilities: dict[str, bool]
 
