@@ -6,6 +6,9 @@ from vllm_text_oracle import TextOracle as PublicTextOracle
 from vllm_text_oracle.oracle import TextOracle
 
 
+pytestmark = pytest.mark.model("glm-5.2")
+
+
 MODEL_PATH = Path(
     "model_assets/zai-org--GLM-5.2/"
     "b4734de4facf877f85769a911abafc5283eab3d9"

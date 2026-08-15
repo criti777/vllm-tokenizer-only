@@ -1,6 +1,11 @@
 from pathlib import Path
 
+import pytest
+
 from vllm_text_oracle.oracle import TextOracle
+
+
+pytestmark = pytest.mark.model("glm-5.2")
 
 
 MODEL_PATH = Path(

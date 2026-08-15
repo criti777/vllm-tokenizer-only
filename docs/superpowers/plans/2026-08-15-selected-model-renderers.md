@@ -83,11 +83,11 @@ def test_unknown_model_never_falls_back(registry):
 - Produces: `parse_model_selection(values, registry) -> tuple[ModelProfile, ...]`.
 - Pytest option: repeatable `--model PROFILE`; absent means core only; `all` expands registry order.
 
-- [ ] **Step 1: Add tests for no selection, repeated selection, duplicate removal, unknown profile, and `all` exclusivity.**
-- [ ] **Step 2: Run `pytest tests/test_model_selection.py -v` and confirm failure.**
-- [ ] **Step 3: Implement shared parser and pytest collection marker `@pytest.mark.model("glm-5.2")`.**
-- [ ] **Step 4: Wire both result tools to the same parser and test their argument parsing without loading tokenizers.**
-- [ ] **Step 5: Run core, one-model, and all-selection collection tests; commit `feat: add model-selective test and data commands`.**
+- [x] **Step 1: Add tests for no selection, repeated selection, duplicate removal, unknown profile, and `all` exclusivity.**
+- [x] **Step 2: Run `pytest tests/test_model_selection.py -v` and confirm failure.**
+- [x] **Step 3: Implement shared parser and pytest collection marker `@pytest.mark.model("glm-5.2")`.**
+- [x] **Step 4: Wire both result tools to the same parser and test their argument parsing without loading tokenizers.**
+- [x] **Step 5: Run core, one-model, and all-selection collection tests; commit `feat: add model-selective test and data commands`.**
 
 ### Task 3: Offline Asset Manifests and Safe Fetching
 

@@ -13,6 +13,8 @@ from vllm_text_oracle.hashing import (
     token_ids_sha256,
 )
 from vllm_text_oracle.jsonl import read_jsonl
+from vllm_text_oracle.model_selection import parse_model_selection
+from vllm_text_oracle.profiles import ModelRegistry
 
 
 SHARDS = {
@@ -20,6 +22,7 @@ SHARDS = {
     "generated": "generated/combinatorial.jsonl",
     "ultrachat": "imported/ultrachat.jsonl",
 }
+PROFILE_FILE = Path("models/profiles.json")
 
 
 def verify_result_set(request_dir: Path, result_dir: Path) -> dict[str, int]:
@@ -90,11 +93,22 @@ def _verify_error(case_id: str, result: dict[str, Any]) -> None:
         raise ValueError(f"invalid error record: {case_id}")
 
 
-def main() -> None:
+def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser()
+    parser.add_argument("--model", action="append", metavar="PROFILE")
     parser.add_argument("--requests", type=Path, default=Path("datasets/requests"))
     parser.add_argument("--results", type=Path, required=True)
-    args = parser.parse_args()
+    return parser
+
+
+def main() -> None:
+    args = build_parser().parse_args()
+    registry = ModelRegistry.from_file(PROFILE_FILE)
+    selected = parse_model_selection(args.model or ["glm-5.2"], registry)
+    if tuple(profile.profile_id for profile in selected) != ("glm-5.2",):
+        raise SystemExit(
+            "selected model verification is enabled after its baselines are generated"
+        )
     print(json.dumps(verify_result_set(args.requests, args.results), sort_keys=True))
 
 

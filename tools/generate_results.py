@@ -13,11 +13,14 @@ from typing import Any
 from vllm_text_oracle.jsonl import read_jsonl, write_jsonl_atomic
 from vllm_text_oracle.oracle import TextOracle
 from vllm_text_oracle.hashing import canonical_json_sha256
+from vllm_text_oracle.model_selection import parse_model_selection
+from vllm_text_oracle.profiles import ModelRegistry
 
 
 MODEL_ID = "zai-org/GLM-5.2"
 MODEL_REVISION = "b4734de4facf877f85769a911abafc5283eab3d9"
 VLLM_COMMIT = "568afb3a13806beb53bb2e6bd518269357b237c0"
+PROFILE_FILE = Path("models/profiles.json")
 
 
 def generate_records(
@@ -83,8 +86,9 @@ def dependency_versions() -> dict[str, str]:
     return {name: importlib.metadata.version(name) for name in names}
 
 
-def main() -> None:
+def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser()
+    parser.add_argument("--model", action="append", metavar="PROFILE")
     parser.add_argument(
         "--assets",
         type=Path,
@@ -98,7 +102,17 @@ def main() -> None:
         type=Path,
         default=Path(f"datasets/results/zai-org--GLM-5.2/{MODEL_REVISION}"),
     )
-    args = parser.parse_args()
+    return parser
+
+
+def main() -> None:
+    args = build_parser().parse_args()
+    registry = ModelRegistry.from_file(PROFILE_FILE)
+    selected = parse_model_selection(args.model or ["glm-5.2"], registry)
+    if tuple(profile.profile_id for profile in selected) != ("glm-5.2",):
+        raise SystemExit(
+            "selected model generation is enabled after its renderer assets are installed"
+        )
     manifest_path = args.output / "manifest.json"
     if manifest_path.exists():
         raise SystemExit(f"refusing to overwrite completed baseline: {args.output}")
