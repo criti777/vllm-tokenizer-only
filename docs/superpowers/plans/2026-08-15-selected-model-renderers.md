@@ -53,7 +53,7 @@
 - Produces: `ModelProfile`, `ModelRegistry.from_file(path)`, `ModelRegistry.resolve(alias)`, `OracleStage`, `ProfileResolutionError`.
 - `ModelProfile` fields: `profile_id`, `aliases`, `repository`, `revision`, `renderer`, `asset_manifest`, `capabilities`.
 
-- [ ] **Step 1: Write failing registry tests**
+- [x] **Step 1: Write failing registry tests**
 
 ```python
 def test_resolves_each_canonical_profile(registry):
@@ -65,10 +65,10 @@ def test_unknown_model_never_falls_back(registry):
         registry.resolve("deepseek-v99")
 ```
 
-- [ ] **Step 2: Run `pytest tests/test_profiles.py -v` and confirm missing-module failure.**
-- [ ] **Step 3: Implement frozen Pydantic profile records, duplicate-alias validation, strict resolution, and all seven official records.**
-- [ ] **Step 4: Run `pytest tests/test_profiles.py tests/test_contracts.py -v` and confirm PASS.**
-- [ ] **Step 5: Commit with `git commit -m "feat: add strict model profile registry"`.**
+- [x] **Step 2: Run `pytest tests/test_profiles.py -v` and confirm missing-module failure.**
+- [x] **Step 3: Implement frozen Pydantic profile records, duplicate-alias validation, strict resolution, and all seven official records.**
+- [x] **Step 4: Run `pytest tests/test_profiles.py tests/test_contracts.py -v` and confirm PASS.**
+- [x] **Step 5: Commit with `git commit -m "feat: add strict model profile registry"`.**
 
 ### Task 2: Model-Selective Pytest and CLI Semantics
 
