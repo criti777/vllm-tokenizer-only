@@ -11,6 +11,13 @@ from typing import Any
 from transformers import AutoTokenizer
 
 from vendor.vllm.extracted.hf_renderer import render_and_encode
+from vendor.vllm.extracted.chat_utils import parse_chat_messages
+from vendor.vllm.extracted.deepseek_v32_encoding import (
+    encode_messages as encode_deepseek_v32_messages,
+)
+from vendor.vllm.extracted.deepseek_v4_encoding import (
+    encode_messages as encode_deepseek_v4_messages,
+)
 
 from .profiles import ModelProfile
 
@@ -84,12 +91,94 @@ class HFRenderer:
         )
 
 
-def build_renderer(profile: ModelProfile, asset_path: Path) -> HFRenderer:
+class DeepSeekV32Renderer:
+    name = "deepseek_v32"
+
+    def __init__(self, tokenizer: Any) -> None:
+        self.tokenizer = tokenizer
+
+    @classmethod
+    def from_local_assets(cls, path: Path) -> "DeepSeekV32Renderer":
+        tokenizer = AutoTokenizer.from_pretrained(path, local_files_only=True)
+        return cls(tokenizer)
+
+    def render(self, parsed: Any) -> RenderedPrompt:
+        conversation = parse_chat_messages(parsed.messages, "string")
+        if parsed.tools:
+            conversation.insert(0, {"role": "system", "content": "", "tools": parsed.tools})
+        kwargs = parsed.template_kwargs(parsed.tools)
+        thinking = bool(kwargs.get("thinking") or kwargs.get("enable_thinking"))
+        drop_thinking = bool(conversation and conversation[-1]["role"] == "user")
+        text = encode_deepseek_v32_messages(
+            conversation,
+            thinking_mode="thinking" if thinking else "chat",
+            drop_thinking=drop_thinking,
+        )
+        token_ids = self.tokenizer.encode(text, add_special_tokens=False)
+        return RenderedPrompt(
+            text=text,
+            token_ids=list(token_ids),
+            diagnostics={
+                "thinking_mode": "thinking" if thinking else "chat",
+                "drop_thinking": drop_thinking,
+            },
+        )
+
+
+class DeepSeekV4Renderer:
+    name = "deepseek_v4"
+
+    def __init__(self, tokenizer: Any) -> None:
+        self.tokenizer = tokenizer
+
+    @classmethod
+    def from_local_assets(cls, path: Path) -> "DeepSeekV4Renderer":
+        tokenizer = AutoTokenizer.from_pretrained(path, local_files_only=True)
+        return cls(tokenizer)
+
+    def render(self, parsed: Any) -> RenderedPrompt:
+        conversation = parse_chat_messages(parsed.messages, "string")
+        if parsed.tools:
+            conversation.insert(0, {"role": "system", "content": "", "tools": parsed.tools})
+        kwargs = parsed.template_kwargs(parsed.tools)
+        thinking = bool(kwargs.get("thinking") or kwargs.get("enable_thinking"))
+        effort = kwargs.get("reasoning_effort")
+        if effort == "none":
+            thinking = False
+            effort = None
+        elif isinstance(effort, str):
+            effort = "max" if effort in {"max", "xhigh"} else "high"
+        else:
+            effort = None
+        drop_thinking = bool(kwargs.get("drop_thinking", True))
+        text = encode_deepseek_v4_messages(
+            conversation,
+            thinking_mode="thinking" if thinking else "chat",
+            drop_thinking=drop_thinking,
+            reasoning_effort=effort,
+        )
+        token_ids = self.tokenizer.encode(text, add_special_tokens=False)
+        return RenderedPrompt(
+            text=text,
+            token_ids=list(token_ids),
+            diagnostics={
+                "thinking_mode": "thinking" if thinking else "chat",
+                "drop_thinking": drop_thinking,
+                "reasoning_effort": effort,
+            },
+        )
+
+
+def build_renderer(
+    profile: ModelProfile, asset_path: Path
+) -> HFRenderer | DeepSeekV32Renderer | DeepSeekV4Renderer:
     if profile.renderer == "hf":
         return HFRenderer.from_local_assets(
             asset_path,
             trust_remote_code=profile.trust_remote_code,
         )
-    raise RendererUnavailableError(
-        f"renderer {profile.renderer} is not installed for {profile.profile_id}"
-    )
+    if profile.renderer == "deepseek_v32":
+        return DeepSeekV32Renderer.from_local_assets(asset_path)
+    if profile.renderer == "deepseek_v4":
+        return DeepSeekV4Renderer.from_local_assets(asset_path)
+    raise RendererUnavailableError(f"unknown renderer {profile.renderer}")

@@ -3,7 +3,7 @@ from pathlib import Path
 import pytest
 
 from vllm_text_oracle import ProfileResolutionError, TextOracle
-from vllm_text_oracle.renderers import RendererUnavailableError
+from vllm_text_oracle.renderers import DeepSeekV4Renderer
 
 
 pytestmark = pytest.mark.model("glm-5.2")
@@ -55,5 +55,6 @@ def test_unknown_model_is_rejected_before_assets_are_loaded() -> None:
 
 
 def test_specialized_renderer_never_falls_back_to_hf() -> None:
-    with pytest.raises(RendererUnavailableError, match="deepseek_v4"):
-        TextOracle.from_model("deepseek-v4", assets_root=ASSETS_ROOT)
+    oracle = TextOracle.from_model("deepseek-v4", assets_root=ASSETS_ROOT)
+
+    assert isinstance(oracle._renderer, DeepSeekV4Renderer)

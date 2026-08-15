@@ -19,6 +19,13 @@ Mapping:
 - `template_format.py` extracts the Jinja content-format detection behavior.
 - `hf_renderer.py` extracts developer-role fallback, template rendering, and
   tokenizer encoding from `HfRenderer` and `safe_apply_chat_template`.
+- `deepseek_v32_encoding.py` and `deepseek_v4_encoding.py` are byte-for-byte
+  copies of the pinned vLLM tokenizer encoders. The lightweight renderer
+  adapters in `src/vllm_text_oracle/renderers.py` replace only vLLM engine,
+  `VllmConfig`, async executor, and prompt-container plumbing.
+- The matching upstream tokenizer wrappers and renderer classes are retained
+  under `upstream/tokenizers/` and `upstream/renderers/` for differential
+  review; they are not imported at runtime.
 
 Intentional text-only adaptations:
 
@@ -31,4 +38,5 @@ Intentional text-only adaptations:
   inputs fail as `unsupported_multimodal`.
 - Errors are classified by stable pipeline stage and type; dependency-specific
   message text remains diagnostic.
-
+- DeepSeek V3.2 and V4 are selected explicitly from the model profile registry;
+  neither renderer may fall back to the generic Hugging Face chat template.

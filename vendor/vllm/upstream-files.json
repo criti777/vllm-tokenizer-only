@@ -19,7 +19,30 @@
     {
       "path": "vllm/renderers/params.py",
       "sha256": "3a551bcbda5d18c3258ab4a4c17db953e97c733badab9bd2157ff62726c73442"
+    },
+    {
+      "path": "vllm/tokenizers/deepseek_v32.py",
+      "sha256": "1c88d7e4eb8c2d7c71d652ee139201062d4f11edf21145bb92bbd91b650c662e"
+    },
+    {
+      "path": "vllm/tokenizers/deepseek_v32_encoding.py",
+      "sha256": "d3465bdfff2ac35915472e0c1a267714e7a8cc7e9fe0dc6f73e19ceb7b22c314"
+    },
+    {
+      "path": "vllm/renderers/deepseek_v32.py",
+      "sha256": "538f6b2b2db0e0e013318e7ebca7b46c084b865cc7658c76fd499f9bf5ecd85c"
+    },
+    {
+      "path": "vllm/tokenizers/deepseek_v4.py",
+      "sha256": "b710debe021e80cbc9935ca37a11df9133bbc50f2d4807470d2de372f0054e20"
+    },
+    {
+      "path": "vllm/tokenizers/deepseek_v4_encoding.py",
+      "sha256": "20eb61abe97be7607fd12e2b929faef91743cd2699ad9a4e032b54237d137694"
+    },
+    {
+      "path": "vllm/renderers/deepseek_v4.py",
+      "sha256": "b989ea4b4240df0f5eeb832942d1aaa8e72e56743b45186b1b6145d7e7bbbd3a"
     }
   ]
 }
-

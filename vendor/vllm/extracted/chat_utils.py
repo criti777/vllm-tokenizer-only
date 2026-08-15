@@ -90,6 +90,11 @@ def parse_chat_messages(
         for key in ("name", "task"):
             if isinstance(source.get(key), str):
                 message[key] = source[key]
+        for key in ("wo_eos", "prefix", "mask"):
+            if key in source:
+                message[key] = source[key]
+        if isinstance(source.get("content_blocks"), list):
+            message["content_blocks"] = copy.deepcopy(source["content_blocks"])
         if source["role"] == "assistant":
             if source.get("tool_calls") is not None:
                 message["tool_calls"] = copy.deepcopy(source["tool_calls"])
@@ -139,4 +144,3 @@ def _postprocess_messages(messages: list[dict[str, Any]]) -> None:
                     function["arguments"] = parsed if parsed is not None else {}
             else:
                 function["arguments"] = {}
-

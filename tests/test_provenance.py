@@ -1,4 +1,5 @@
 import hashlib
+import json
 import threading
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
@@ -6,6 +7,10 @@ from pathlib import Path
 import pytest
 
 from tools.fetch_common import DownloadError, fetch_checked
+
+
+UPSTREAM_MANIFEST = Path("vendor/vllm/upstream-files.json")
+UPSTREAM_ROOT = Path("vendor/vllm/upstream")
 
 
 class _Handler(BaseHTTPRequestHandler):
@@ -62,3 +67,32 @@ def test_fetch_checked_rejects_hash_mismatch(
         fetch_checked(f"{server_url}/ok", tmp_path / "asset.bin", "0" * 64)
 
     assert not (tmp_path / "asset.bin").exists()
+
+
+def test_specialized_deepseek_sources_are_pinned_and_byte_exact() -> None:
+    manifest = json.loads(UPSTREAM_MANIFEST.read_text(encoding="utf-8"))
+    entries = {entry["path"]: entry["sha256"] for entry in manifest["files"]}
+    expected = {
+        "vllm/tokenizers/deepseek_v32.py",
+        "vllm/tokenizers/deepseek_v32_encoding.py",
+        "vllm/renderers/deepseek_v32.py",
+        "vllm/tokenizers/deepseek_v4.py",
+        "vllm/tokenizers/deepseek_v4_encoding.py",
+        "vllm/renderers/deepseek_v4.py",
+    }
+
+    assert expected <= entries.keys()
+    for upstream_path in expected:
+        local_path = UPSTREAM_ROOT / upstream_path.removeprefix("vllm/")
+        assert local_path.is_file()
+        assert hashlib.sha256(local_path.read_bytes()).hexdigest() == entries[
+            upstream_path
+        ]
+
+
+def test_deepseek_encoding_extractions_are_unmodified() -> None:
+    for name in ("deepseek_v32_encoding.py", "deepseek_v4_encoding.py"):
+        upstream = UPSTREAM_ROOT / "tokenizers" / name
+        extracted = Path("vendor/vllm/extracted") / name
+
+        assert extracted.read_bytes() == upstream.read_bytes()
