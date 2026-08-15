@@ -20,6 +20,8 @@ class OracleResult:
     case_id: str
     status: Literal["ok", "error"]
     request_sha256: str
+    model_profile: str | None = None
+    renderer: str | None = None
     rendered_text: str | None = None
     rendered_text_sha256: str | None = None
     token_ids_length: int | None = None
@@ -38,11 +40,15 @@ class OracleResult:
         token_ids: list[int],
         include_token_ids: bool,
         diagnostics: dict[str, Any],
+        model_profile: str | None = None,
+        renderer: str | None = None,
     ) -> "OracleResult":
         return cls(
             case_id=case_id,
             status="ok",
             request_sha256=request_sha256,
+            model_profile=model_profile,
+            renderer=renderer,
             rendered_text=rendered_text,
             rendered_text_sha256=text_sha256(rendered_text),
             token_ids_length=len(token_ids),
@@ -58,11 +64,15 @@ class OracleResult:
         case_id: str,
         request_sha256: str,
         error: OracleError,
+        model_profile: str | None = None,
+        renderer: str | None = None,
     ) -> "OracleResult":
         return cls(
             case_id=case_id,
             status="error",
             request_sha256=request_sha256,
+            model_profile=model_profile,
+            renderer=renderer,
             error=error,
         )
 

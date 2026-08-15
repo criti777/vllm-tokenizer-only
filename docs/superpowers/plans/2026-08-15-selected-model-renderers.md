@@ -121,11 +121,11 @@ def test_unknown_model_never_falls_back(registry):
 - Produces: `TextOracle.from_model(model_alias, assets_root=...)` and unchanged `process(request, case_id, include_token_ids=False)`.
 - Renderer protocol: `render(request) -> RenderedPrompt(text, token_ids, diagnostics)`.
 
-- [ ] **Step 1: Test profile resolution, request-model mismatch, renderer diagnostics, legacy GLM construction, and stable error stages.**
-- [ ] **Step 2: Run focused tests and confirm constructor/result-field failures.**
-- [ ] **Step 3: Implement dispatcher for `hf`, `deepseek_v32`, and `deepseek_v4`; convert exceptions at exact stage boundaries.**
-- [ ] **Step 4: Prove existing GLM-5.2 golden requests retain exact rendered bytes and token IDs.**
-- [ ] **Step 5: Run oracle/core tests and commit `refactor: route requests through model profiles`.**
+- [x] **Step 1: Test profile resolution, request-model mismatch, renderer diagnostics, legacy GLM construction, and stable error stages.**
+- [x] **Step 2: Run focused tests and confirm constructor/result-field failures.**
+- [x] **Step 3: Implement dispatcher for `hf`, `deepseek_v32`, and `deepseek_v4`; convert exceptions at exact stage boundaries.**
+- [x] **Step 4: Prove existing GLM-5.2 golden requests retain exact rendered bytes and token IDs.**
+- [x] **Step 5: Run oracle/core tests and commit `refactor: route requests through model profiles`.**
 
 ### Task 5: Generic HF Profiles
 
