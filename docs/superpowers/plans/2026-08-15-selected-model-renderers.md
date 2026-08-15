@@ -244,10 +244,10 @@ def test_unknown_model_never_falls_back(registry):
 - Consumes: pinned requests and all verified profiles.
 - Produces: seven complete 300/2,000/10,000 baseline sets.
 
-- [ ] **Step 1: Generate each profile independently and verify counts, IDs, hashes, and error distributions before publication.**
-- [ ] **Step 2: Recompute each profile in a new temporary directory and compare every output SHA-256.**
-- [ ] **Step 3: Write aggregate manifest and document per-model commands, result schema, multimedia boundary, and expected errors.**
-- [ ] **Step 4: Run full verification and commit each model result as its own Git checkpoint.**
+- [x] **Step 1: Generate each profile independently and verify counts, IDs, hashes, and error distributions before publication.**
+- [x] **Step 2: Recompute each profile in a new temporary directory and compare every output SHA-256.**
+- [x] **Step 3: Write aggregate manifest and document per-model commands, result schema, multimedia boundary, and expected errors.**
+- [x] **Step 4: Run full verification and commit each model result as its own Git checkpoint.**
 
 ### Task 12: Final Regression and Delivery
 
@@ -259,7 +259,7 @@ def test_unknown_model_never_falls_back(registry):
 **Interfaces:**
 - Produces: a clean, pushed, reproducible release candidate.
 
-- [ ] **Step 1: Run core tests, then each profile independently, then `--model all`; save exact command outcomes in the handoff.**
-- [ ] **Step 2: Run request/result/provenance/reproducibility verifiers and `git diff --check`.**
-- [ ] **Step 3: Inspect the full diff for secrets, weights, caches, unexpected binaries, and license omissions.**
-- [ ] **Step 4: Update docs and plan status, commit `docs: complete selected-model oracle coverage`, push `main`, and verify `HEAD == origin/main`.**
+- [x] **Step 1: Run core tests, then each profile independently, then `--model all`; save exact command outcomes in the handoff.**
+- [x] **Step 2: Run request/result/provenance/reproducibility verifiers and `git diff --check`.**
+- [x] **Step 3: Inspect the full diff for secrets, weights, caches, unexpected binaries, and license omissions.**
+- [x] **Step 4: Update docs and plan status, commit `docs: complete selected-model oracle coverage`, push `main`, and verify `HEAD == origin/main`.**

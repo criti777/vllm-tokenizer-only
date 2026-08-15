@@ -1,0 +1,63 @@
+{
+  "counts": {
+    "error": 1420,
+    "ok": 21680,
+    "total": 23100
+  },
+  "profile_count": 7,
+  "profiles": {
+    "deepseek-v3": {
+      "error": 721,
+      "manifest": "deepseek-v3/manifest.json",
+      "manifest_sha256": "4b8f2b36f84f5930dcba8436106573a3c81dc5e0c14781ee48e9b289a8b38b4f",
+      "ok": 2579,
+      "total": 3300
+    },
+    "deepseek-v3.2": {
+      "error": 525,
+      "manifest": "deepseek-v3.2/manifest.json",
+      "manifest_sha256": "f04acc0c3eddeda193429e7fcfeb753a76ab956a03c135f3aec584705c3b053b",
+      "ok": 2775,
+      "total": 3300
+    },
+    "deepseek-v4": {
+      "error": 30,
+      "manifest": "deepseek-v4/manifest.json",
+      "manifest_sha256": "a359eac42d5cf4a3d78ffdcf4e784d4086d8234394b77abd550c9826a2d31907",
+      "ok": 3270,
+      "total": 3300
+    },
+    "glm-5.1": {
+      "error": 36,
+      "manifest": "glm-5.1/manifest.json",
+      "manifest_sha256": "b163095f6e8620a96c65129db51461e7744dca4568cebf7ba4be91c1ea8f9f0d",
+      "ok": 3264,
+      "total": 3300
+    },
+    "glm-5.2": {
+      "error": 36,
+      "manifest": "glm-5.2/manifest.json",
+      "manifest_sha256": "adf66f2f3a421a46353bcd7c3bf49aae52967df6414fb4bc196f41d0d3f66c2d",
+      "ok": 3264,
+      "total": 3300
+    },
+    "kimi-k2.6": {
+      "error": 36,
+      "manifest": "kimi-k2.6/manifest.json",
+      "manifest_sha256": "7a7a9ee0cff5cddd4036412ac661246756fedc38b64c231db5cd2890c5c19c3f",
+      "ok": 3264,
+      "total": 3300
+    },
+    "minimax-m2.7": {
+      "error": 36,
+      "manifest": "minimax-m2.7/manifest.json",
+      "manifest_sha256": "e84e813104cf5e21ad855c34a2480c3b32cd4543702fa018a4cf0c5d5989885e",
+      "ok": 3264,
+      "total": 3300
+    }
+  },
+  "schema_version": 1,
+  "selection": {
+    "ultrachat_limit": 1000
+  }
+}

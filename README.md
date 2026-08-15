@@ -1,6 +1,6 @@
 # vLLM Text Input Oracle
 
-一个不加载模型权重的离线参考实现与 GLM-5.2 对拍数据集：
+一个不加载模型权重的离线参考实现与分模型对拍数据集：
 
 ```text
 OpenAI Chat Completions JSON
@@ -12,10 +12,10 @@ OpenAI Chat Completions JSON
 ```
 
 当前基线固定为 vLLM `v0.26.0`（commit
-`568afb3a13806beb53bb2e6bd518269357b237c0`）和
-`zai-org/GLM-5.2` revision
-`b4734de4facf877f85769a911abafc5283eab3d9`。仓库只包含 tokenizer、template
-等小型资产，不包含模型权重，不依赖 PyTorch、CUDA 或 vLLM 服务进程。
+`568afb3a13806beb53bb2e6bd518269357b237c0`），覆盖官方主版本
+DeepSeek-V3/V3.2/V4、Kimi-K2.6、GLM-5.1/5.2 和 MiniMax-M2.7。每个 profile
+都固定官方模型仓的不可变 revision。仓库只包含 tokenizer、template 等文本资产，
+不包含模型权重，不依赖 PyTorch、CUDA 或 vLLM 服务进程。
 
 ## 目录
 
@@ -23,7 +23,7 @@ OpenAI Chat Completions JSON
 - `vendor/vllm/extracted/`：文本 Chat Completions 可达路径的精简提取版。
 - `src/vllm_text_oracle/`：稳定调用接口、结果结构和哈希定义。
 - `datasets/requests/`：300 条手写、2,000 条组合、10,000 条 UltraChat 请求。
-- `datasets/results/`：与请求逐条对应的 GLM-5.2 oracle 结果。
+- `datasets/results/by-profile/`：七个模型各自独立的分层 oracle 结果。
 - `tools/`：请求构造、结果生成与完整性校验命令。
 
 提取边界与上游文件映射见 `vendor/vllm/EXTRACTION.md`，完整设计与不支持项见
@@ -42,10 +42,7 @@ python3.11 -m venv .venv
 from pathlib import Path
 from vllm_text_oracle import TextOracle
 
-revision = "b4734de4facf877f85769a911abafc5283eab3d9"
-oracle = TextOracle.from_local_assets(
-    Path("model_assets/zai-org--GLM-5.2") / revision
-)
+oracle = TextOracle.from_model("glm-5.2", assets_root=Path("model_assets"))
 result = oracle.process(
     {
         "model": "zai-org/GLM-5.2",
@@ -60,6 +57,16 @@ print(result.token_ids_length)
 print(result.token_ids)
 ```
 
+严格支持的 profile 为：`deepseek-v3`、`deepseek-v3.2`、`deepseek-v4`、
+`kimi-k2.6`、`glm-5.1`、`glm-5.2`、`minimax-m2.7`。未知模型不会静默回退。
+DeepSeek-V3.2/V4 使用从固定 vLLM 上游提取的专用 renderer，其余 profile 使用
+固定 vLLM/Hugging Face 文本模板路径。
+
+本项目只统计文本 token。Kimi-K2.6 能在纯渲染阶段把 OpenAI 图片 content part
+转成官方 `<|media_*|>` 文本占位符；其他 profile 遇到图片时返回明确的
+`processor_required`，不会下载图片，也不会伪造视觉 token、pixel values 或
+embedding 的数量。
+
 ## 使用基线对拍另一套实现
 
 读取同一行的 `request`，依次比较：
@@ -70,24 +77,27 @@ print(result.token_ids)
 4. `token_ids_sha256`；长度相同但哈希不同，说明 token 序列仍不一致。
 5. 手写样本的 `token_ids`；用于定位第一个分叉 token。
 
-结果文件位于：
+每个模型的结果文件位于：
 
 ```text
-datasets/results/zai-org--GLM-5.2/
-  b4734de4facf877f85769a911abafc5283eab3d9/
-    handwritten.results.jsonl
-    generated.results.jsonl
-    ultrachat.results.jsonl
+datasets/results/by-profile/
+  <profile>/
+    handwritten.jsonl
+    combinatorial.jsonl
+    ultrachat.jsonl.gz
     manifest.json
+  manifest.json
 ```
 
 生成/导入样本不保存完整 token IDs，以控制仓库体积，但保留精确长度和整个
 token 序列的 SHA-256。手写成功样本保存完整 IDs。错误样本保存稳定的
 `stage`/`type`；依赖库产生的详细 `message` 只用于诊断，不作为跨版本契约。
 
-当前 36 条手写错误中，30 条带 `invalid` 标签，是故意构造的非法请求；另外
-6 条带 `roles` 标签，是 OpenAI 结构层可以接收、但 GLM-5.2 官方模板拒绝的
-内容边界样本。它们用于测试模型适配层，不能从基线中删掉。
+当前提交的是快速基准：每模型包含完整 300 条手写、2,000 条组合，以及
+UltraChat 的确定性前 1,000 条，共 3,300 条。每个 profile manifest 明确记录
+`selection.ultrachat_limit: 1000`，不能将其误报为 10,000 条全量基准。七模型合计
+23,100 条，其中 21,680 条成功、1,420 条稳定错误。不同模型的错误数不同，因为
+官方模板对 role 顺序、tools 和非法结构的接受边界不同；错误记录本身也是对拍契约。
 
 ## 生成、校验与测试
 
@@ -95,20 +105,25 @@ token 序列的 SHA-256。手写成功样本保存完整 IDs。错误样本保�
 部分分片，则只会在逐条核对 case ID 和请求哈希后安全续跑。
 
 ```bash
-.venv/bin/python -m tools.generate_results
-.venv/bin/python -m tools.verify_results \
-  --results datasets/results/zai-org--GLM-5.2/b4734de4facf877f85769a911abafc5283eab3d9
+.venv/bin/python -m tools.generate_results \
+  --model glm-5.2 --ultrachat-limit 1000
+.venv/bin/python -m tools.verify_results --model glm-5.2
+.venv/bin/python -m tools.verify_results --model all
+.venv/bin/python -m tools.build_result_manifest
 .venv/bin/python -m tools.verify_requests
 .venv/bin/python -m tools.verify_upstream_parity --ultrachat-sample 1000
 .venv/bin/python -m tools.verify_reproducibility \
-  --expected datasets/results/zai-org--GLM-5.2/b4734de4facf877f85769a911abafc5283eab3d9 \
-  --actual /path/to/independently-generated-results
-.venv/bin/python -m pytest -q
+  --expected datasets/results/by-profile/glm-5.2 \
+  --actual /path/to/independently-generated-results/glm-5.2
+.venv/bin/pytest --model glm-5.2 -q
+.venv/bin/pytest --model all -q
 ```
 
-已提交的基线共 12,300 条：12,264 条成功、36 条预期错误。校验器检查请求和
-结果一一对应、ID 唯一、请求哈希、渲染文本哈希、manifest 计数，以及所有可得
-完整 token IDs 的长度和哈希。
+可重复传入 `--model` 选择若干 profile；省略时只运行 GLM-5.2，`all` 才会运行
+全部模型。结果目录一旦存在完整 manifest 就拒绝覆盖。校验器检查请求与结果
+一一对应、模型隔离、请求哈希、渲染文本哈希、manifest/文件哈希，以及所有可得
+完整 token IDs 的长度与哈希。UltraChat gzip 固定 `mtime=0`，七个 profile 均已
+从空目录复算并通过四文件逐字节比较。
 
 差分工具使用依据固定 vLLM 上游源码独立实现的纯文本 reference path，不调用
 交付版的 message normalizer 或 renderer；它比较状态、渲染字符串和完整 token

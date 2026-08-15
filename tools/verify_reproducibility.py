@@ -14,9 +14,23 @@ RESULT_FILES = [
     "ultrachat.results.jsonl",
     "manifest.json",
 ]
+PROFILE_RESULT_FILES = [
+    "handwritten.jsonl",
+    "combinatorial.jsonl",
+    "ultrachat.jsonl.gz",
+    "manifest.json",
+]
 
 
-def compare_directories(expected: Path, actual: Path, files: list[str] = RESULT_FILES) -> dict[str, str]:
+def compare_directories(
+    expected: Path, actual: Path, files: list[str] | None = None
+) -> dict[str, str]:
+    if files is None:
+        files = (
+            PROFILE_RESULT_FILES
+            if (expected / "handwritten.jsonl").is_file()
+            else RESULT_FILES
+        )
     hashes: dict[str, str] = {}
     for name in files:
         left = expected / name
