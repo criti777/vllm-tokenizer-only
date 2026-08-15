@@ -2,6 +2,7 @@ from pathlib import Path
 
 import pytest
 
+from vllm_text_oracle import TextOracle as PublicTextOracle
 from vllm_text_oracle.oracle import TextOracle
 
 
@@ -9,6 +10,10 @@ MODEL_PATH = Path(
     "model_assets/zai-org--GLM-5.2/"
     "b4734de4facf877f85769a911abafc5283eab3d9"
 )
+
+
+def test_text_oracle_is_exported_from_public_package() -> None:
+    assert PublicTextOracle is TextOracle
 
 
 @pytest.fixture(scope="module")
@@ -74,4 +79,3 @@ def test_invalid_message_returns_stable_validation_error(oracle: TextOracle) -> 
     assert result.error is not None
     assert result.error.stage == "request_validation"
     assert result.error.type == "validation_error"
-
