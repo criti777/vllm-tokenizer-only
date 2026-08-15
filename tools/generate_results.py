@@ -127,7 +127,10 @@ def generate_profile_result_set(
     *,
     request_dir: Path,
     output_root: Path,
+    ultrachat_limit: int | None = None,
 ) -> Path:
+    if ultrachat_limit is not None and ultrachat_limit <= 0:
+        raise ValueError("ultrachat_limit must be positive")
     output = output_root / profile.profile_id
     manifest_path = output / "manifest.json"
     if manifest_path.exists():
@@ -146,6 +149,8 @@ def generate_profile_result_set(
     files: dict[str, dict[str, int | str]] = {}
     for shard, source in inputs.items():
         request_records = list(read_jsonl(source))
+        if shard == "ultrachat" and ultrachat_limit is not None:
+            request_records = request_records[:ultrachat_limit]
         result_path = output / names[shard]
         if result_path.exists():
             results = reuse_complete_shard(
@@ -183,6 +188,7 @@ def generate_profile_result_set(
         "vllm": {"tag": "v0.26.0", "commit": VLLM_COMMIT},
         "profile_id": profile.profile_id,
         "request_model_override": profile.repository,
+        "selection": {"ultrachat_limit": ultrachat_limit},
         "model": {"id": profile.repository, "revision": profile.revision},
         "renderer": profile.renderer,
         "dependencies": dependency_versions(),
@@ -211,6 +217,7 @@ def build_parser() -> argparse.ArgumentParser:
         type=Path,
         default=Path("datasets/results/by-profile"),
     )
+    parser.add_argument("--ultrachat-limit", type=int)
     return parser
 
 
@@ -228,6 +235,7 @@ def main() -> None:
             oracle,
             request_dir=args.requests,
             output_root=args.output_root,
+            ultrachat_limit=args.ultrachat_limit,
         )
         print(f"generated {profile.profile_id}: {output}")
 

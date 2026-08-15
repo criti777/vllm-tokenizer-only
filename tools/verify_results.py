@@ -55,6 +55,11 @@ def verify_profile_result_set(
         "revision": profile.revision,
     }:
         raise ValueError("manifest model identity mismatch")
+    ultrachat_limit = manifest.get("selection", {}).get("ultrachat_limit")
+    if ultrachat_limit is not None and (
+        not isinstance(ultrachat_limit, int) or ultrachat_limit <= 0
+    ):
+        raise ValueError("invalid manifest ultrachat limit")
 
     for filename, expected in manifest.get("files", {}).items():
         path = result_dir / filename
@@ -65,6 +70,8 @@ def verify_profile_result_set(
     seen: set[str] = set()
     for shard, (request_name, result_name) in PROFILE_SHARDS.items():
         requests = list(read_jsonl(request_dir / request_name))
+        if shard == "ultrachat" and ultrachat_limit is not None:
+            requests = requests[:ultrachat_limit]
         results = list(read_jsonl(result_dir / result_name))
         if len(requests) != len(results):
             raise ValueError(f"{shard}: request/result count mismatch")

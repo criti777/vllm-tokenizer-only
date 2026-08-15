@@ -163,6 +163,7 @@ def test_generate_profile_result_set_uses_layered_model_layout(
         profile_oracle,
         request_dir=request_dir,
         output_root=tmp_path / "results",
+        ultrachat_limit=1,
     )
 
     assert result_dir == tmp_path / "results/glm-5.2"
@@ -179,6 +180,7 @@ def test_generate_profile_result_set_uses_layered_model_layout(
     )
     assert manifest["profile_id"] == "glm-5.2"
     assert manifest["request_model_override"] == "zai-org/GLM-5.2"
+    assert manifest["selection"]["ultrachat_limit"] == 1
     assert manifest["counts"]["ultrachat"] == {"error": 0, "ok": 1, "total": 1}
     assert len(manifest["files"]["ultrachat.jsonl.gz"]["sha256"]) == 64
     assert len(manifest["files"]["ultrachat.jsonl.gz"]["content_sha256"]) == 64
@@ -253,6 +255,44 @@ def test_profile_result_set_is_byte_reproducible(tmp_path: Path) -> None:
     assert {
         name: (resumed / name).read_bytes() for name in before_resume
     } == before_resume
+
+
+def test_profile_result_set_applies_ultrachat_limit(tmp_path: Path) -> None:
+    request_dir = tmp_path / "requests"
+    (request_dir / "generated").mkdir(parents=True)
+    (request_dir / "imported").mkdir()
+    write_jsonl_atomic([], request_dir / "handwritten.jsonl")
+    write_jsonl_atomic([], request_dir / "generated/combinatorial.jsonl")
+    write_jsonl_atomic(
+        [
+            {
+                "case_id": f"ultrachat.{index}",
+                "tags": [],
+                "request": {
+                    "messages": [{"role": "user", "content": str(index)}]
+                },
+            }
+            for index in range(3)
+        ],
+        request_dir / "imported/ultrachat.jsonl",
+    )
+    profile = ModelRegistry.from_file(Path("models/profiles.json")).resolve(
+        "glm-5.2"
+    )
+
+    result_dir = generate_profile_result_set(
+        profile,
+        TextOracle.from_model("glm-5.2", assets_root=Path("model_assets")),
+        request_dir=request_dir,
+        output_root=tmp_path / "results",
+        ultrachat_limit=2,
+    )
+
+    results = list(read_jsonl(result_dir / "ultrachat.jsonl.gz"))
+    assert [result["case_id"] for result in results] == [
+        "ultrachat.0",
+        "ultrachat.1",
+    ]
 
 
 @pytest.mark.model("deepseek-v4")
