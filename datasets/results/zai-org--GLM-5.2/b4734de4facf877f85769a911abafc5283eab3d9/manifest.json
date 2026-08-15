@@ -1,0 +1,45 @@
+{
+  "asset_hashes": {
+    "LICENSE": "f4a18c6ae40b0a8e7d2b7667f52f6e1994e54a46430d2e172b73cb8c9b5eb0d7",
+    "chat_template.jinja": "172dc74a35e1752df75ecfb2b2cf9326d2852bb1379868ebeec9571654489679",
+    "config.json": "185f93ee6d12548e16a847e279dc0c3c90b1524c970b0866b42fb545747d859a",
+    "generation_config.json": "ac76b43d8683d3b930126870fc8be73d8679308fe752fa1f381096d8354f6a55",
+    "tokenizer.json": "19e773648cb4e65de8660ea6365e10acca112d42a854923df93db4a6f333a82d",
+    "tokenizer_config.json": "98b1271574f41abf89427ae2dda030d94dc9478f0edc5a8bd240db213c6fd5fc"
+  },
+  "counts": {
+    "generated": {
+      "error": 0,
+      "ok": 2000,
+      "total": 2000
+    },
+    "handwritten": {
+      "error": 36,
+      "ok": 264,
+      "total": 300
+    },
+    "ultrachat": {
+      "error": 0,
+      "ok": 10000,
+      "total": 10000
+    }
+  },
+  "dependencies": {
+    "huggingface-hub": "1.7.1",
+    "jinja2": "3.1.6",
+    "pydantic": "2.12.5",
+    "tokenizers": "0.22.2",
+    "transformers": "5.13.1"
+  },
+  "model": {
+    "id": "zai-org/GLM-5.2",
+    "revision": "b4734de4facf877f85769a911abafc5283eab3d9"
+  },
+  "oracle_version": "0.1.0",
+  "python": "3.11.15",
+  "schema_version": 1,
+  "vllm": {
+    "commit": "568afb3a13806beb53bb2e6bd518269357b237c0",
+    "tag": "v0.26.0"
+  }
+}
