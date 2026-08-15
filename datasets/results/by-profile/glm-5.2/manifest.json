@@ -1,0 +1,58 @@
+{
+  "counts": {
+    "combinatorial": {
+      "error": 0,
+      "ok": 2000,
+      "total": 2000
+    },
+    "handwritten": {
+      "error": 36,
+      "ok": 264,
+      "total": 300
+    },
+    "ultrachat": {
+      "error": 0,
+      "ok": 1000,
+      "total": 1000
+    }
+  },
+  "dependencies": {
+    "huggingface-hub": "1.7.1",
+    "jinja2": "3.1.6",
+    "pydantic": "2.12.5",
+    "tiktoken": "0.12.0",
+    "tokenizers": "0.22.2",
+    "transformers": "5.13.1"
+  },
+  "files": {
+    "combinatorial.jsonl": {
+      "sha256": "ace9290f3580b90b53b5643335295c25ffba923e0d90654c7ae68bdff96c9b93",
+      "size": 2097670
+    },
+    "handwritten.jsonl": {
+      "sha256": "e700e5480b7351dcd6ff5d0b970383b68f6d41c9bf3ab9a9178780aac9a4edad",
+      "size": 690160
+    },
+    "ultrachat.jsonl.gz": {
+      "content_sha256": "a3021b517862fb4147514e7651ccdf1b32c32cc9d1fcd2162ddea116e7c46924",
+      "sha256": "4ee4c4749c860cb36e14e5836c1cfaf94a9fdc75c4bd438e2b64806dee139549",
+      "size": 2068439
+    }
+  },
+  "model": {
+    "id": "zai-org/GLM-5.2",
+    "revision": "b4734de4facf877f85769a911abafc5283eab3d9"
+  },
+  "oracle_version": "0.1.0",
+  "profile_id": "glm-5.2",
+  "renderer": "hf",
+  "request_model_override": "zai-org/GLM-5.2",
+  "schema_version": 2,
+  "selection": {
+    "ultrachat_limit": 1000
+  },
+  "vllm": {
+    "commit": "568afb3a13806beb53bb2e6bd518269357b237c0",
+    "tag": "v0.26.0"
+  }
+}
