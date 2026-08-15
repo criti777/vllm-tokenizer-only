@@ -227,11 +227,11 @@ def test_unknown_model_never_falls_back(registry):
 **Interfaces:**
 - Produces: `data/results/<profile>/{handwritten.jsonl,combinatorial.jsonl,ultrachat.jsonl.gz,manifest.json}`.
 
-- [ ] **Step 1: Test model isolation, one-to-one IDs, token-ID retention policy, deterministic gzip bytes, atomic resume, and compressed/uncompressed hashes.**
-- [ ] **Step 2: Run result-generation tests and confirm layout/compression failures.**
-- [ ] **Step 3: Implement per-profile atomic shards, gzip with `mtime=0`, manifest statistics, and verified resume.**
-- [ ] **Step 4: Generate and verify a tiny fixture for two profiles, then byte-compare a clean recomputation.**
-- [ ] **Step 5: Commit `feat: generate deterministic per-model baselines`.**
+- [x] **Step 1: Test model isolation, one-to-one IDs, token-ID retention policy, deterministic gzip bytes, atomic resume, and compressed/uncompressed hashes.**
+- [x] **Step 2: Run result-generation tests and confirm layout/compression failures.**
+- [x] **Step 3: Implement per-profile atomic shards, gzip with `mtime=0`, manifest statistics, and verified resume.**
+- [x] **Step 4: Generate and verify a tiny fixture for two profiles, then byte-compare a clean recomputation.**
+- [x] **Step 5: Commit `feat: generate deterministic per-model baselines`.**
 
 ### Task 11: Full Corpus Generation and Reproducibility
 
