@@ -98,12 +98,22 @@ token 序列的 SHA-256。手写成功样本保存完整 IDs。错误样本保�
 .venv/bin/python -m tools.generate_results
 .venv/bin/python -m tools.verify_results \
   --results datasets/results/zai-org--GLM-5.2/b4734de4facf877f85769a911abafc5283eab3d9
+.venv/bin/python -m tools.verify_requests
+.venv/bin/python -m tools.verify_upstream_parity --ultrachat-sample 1000
+.venv/bin/python -m tools.verify_reproducibility \
+  --expected datasets/results/zai-org--GLM-5.2/b4734de4facf877f85769a911abafc5283eab3d9 \
+  --actual /path/to/independently-generated-results
 .venv/bin/python -m pytest -q
 ```
 
 已提交的基线共 12,300 条：12,264 条成功、36 条预期错误。校验器检查请求和
 结果一一对应、ID 唯一、请求哈希、渲染文本哈希、manifest 计数，以及所有可得
 完整 token IDs 的长度和哈希。
+
+差分工具使用依据固定 vLLM 上游源码独立实现的纯文本 reference path，不调用
+交付版的 message normalizer 或 renderer；它比较状态、渲染字符串和完整 token
+IDs。没有直接 import 整个 vLLM 包，因为上游模块导入本身会引入 PyTorch、引擎和
+多模态运行时，这些均不属于 oracle 的运行依赖。
 
 ## 许可与来源
 
