@@ -7,10 +7,13 @@ from pathlib import Path
 import pytest
 
 from tools.fetch_common import DownloadError, fetch_checked
+from vllm_text_oracle.profiles import ModelRegistry
 
 
 UPSTREAM_MANIFEST = Path("vendor/vllm/upstream-files.json")
 UPSTREAM_ROOT = Path("vendor/vllm/upstream")
+COVERAGE_MANIFEST = Path("vendor/vllm/coverage.json")
+PROFILE_MANIFEST = Path("models/profiles.json")
 
 
 class _Handler(BaseHTTPRequestHandler):
@@ -96,3 +99,32 @@ def test_deepseek_encoding_extractions_are_unmodified() -> None:
         extracted = Path("vendor/vllm/extracted") / name
 
         assert extracted.read_bytes() == upstream.read_bytes()
+
+
+def test_every_profile_has_source_extraction_and_behavior_coverage() -> None:
+    registry = ModelRegistry.from_file(PROFILE_MANIFEST)
+    coverage = json.loads(COVERAGE_MANIFEST.read_text(encoding="utf-8"))
+
+    assert coverage["vllm_commit"] == (
+        "568afb3a13806beb53bb2e6bd518269357b237c0"
+    )
+    assert tuple(coverage["profiles"]) == registry.profile_ids
+    for profile_id, entry in coverage["profiles"].items():
+        profile = registry.resolve(profile_id)
+        assert entry["renderer"] == profile.renderer
+        assert entry["upstream"]
+        assert entry["extracted"]
+        assert entry["tests"]
+        for relative_path in entry["upstream"]:
+            assert (UPSTREAM_ROOT / relative_path).is_file(), relative_path
+        for relative_path in entry["extracted"] + entry["tests"]:
+            assert Path(relative_path).is_file(), relative_path
+
+
+def test_specialized_profiles_cannot_claim_generic_hf_fallback() -> None:
+    coverage = json.loads(COVERAGE_MANIFEST.read_text(encoding="utf-8"))
+
+    for profile_id in ("deepseek-v3.2", "deepseek-v4"):
+        entry = coverage["profiles"][profile_id]
+        assert entry["renderer"].startswith("deepseek_")
+        assert "vendor/vllm/extracted/hf_renderer.py" not in entry["extracted"]

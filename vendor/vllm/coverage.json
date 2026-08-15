@@ -1,0 +1,118 @@
+{
+  "schema_version": 1,
+  "vllm_commit": "568afb3a13806beb53bb2e6bd518269357b237c0",
+  "profiles": {
+    "deepseek-v3": {
+      "renderer": "hf",
+      "upstream": [
+        "entrypoints/chat_utils.py",
+        "renderers/hf.py",
+        "renderers/params.py"
+      ],
+      "extracted": [
+        "vendor/vllm/extracted/chat_utils.py",
+        "vendor/vllm/extracted/hf_renderer.py",
+        "vendor/vllm/extracted/template_format.py"
+      ],
+      "tests": ["tests/test_hf_profiles.py"]
+    },
+    "deepseek-v3.2": {
+      "renderer": "deepseek_v32",
+      "upstream": [
+        "entrypoints/chat_utils.py",
+        "renderers/deepseek_v32.py",
+        "tokenizers/deepseek_v32.py",
+        "tokenizers/deepseek_v32_encoding.py"
+      ],
+      "extracted": [
+        "vendor/vllm/extracted/chat_utils.py",
+        "vendor/vllm/extracted/deepseek_v32_encoding.py",
+        "src/vllm_text_oracle/renderers.py"
+      ],
+      "tests": ["tests/test_deepseek_specialized.py"]
+    },
+    "deepseek-v4": {
+      "renderer": "deepseek_v4",
+      "upstream": [
+        "entrypoints/chat_utils.py",
+        "renderers/deepseek_v4.py",
+        "tokenizers/deepseek_v4.py",
+        "tokenizers/deepseek_v4_encoding.py"
+      ],
+      "extracted": [
+        "vendor/vllm/extracted/chat_utils.py",
+        "vendor/vllm/extracted/deepseek_v4_encoding.py",
+        "src/vllm_text_oracle/renderers.py"
+      ],
+      "tests": [
+        "tests/test_deepseek_specialized.py",
+        "tests/test_multimodal_boundary.py"
+      ]
+    },
+    "kimi-k2.6": {
+      "renderer": "hf",
+      "upstream": [
+        "entrypoints/chat_utils.py",
+        "renderers/hf.py",
+        "renderers/params.py"
+      ],
+      "extracted": [
+        "vendor/vllm/extracted/chat_utils.py",
+        "vendor/vllm/extracted/hf_renderer.py",
+        "vendor/vllm/extracted/template_format.py",
+        "src/vllm_text_oracle/renderers.py"
+      ],
+      "tests": [
+        "tests/test_hf_profiles.py",
+        "tests/test_multimodal_boundary.py"
+      ]
+    },
+    "glm-5.1": {
+      "renderer": "hf",
+      "upstream": [
+        "entrypoints/chat_utils.py",
+        "renderers/hf.py",
+        "renderers/params.py"
+      ],
+      "extracted": [
+        "vendor/vllm/extracted/chat_utils.py",
+        "vendor/vllm/extracted/hf_renderer.py",
+        "vendor/vllm/extracted/template_format.py"
+      ],
+      "tests": ["tests/test_hf_profiles.py"]
+    },
+    "glm-5.2": {
+      "renderer": "hf",
+      "upstream": [
+        "entrypoints/chat_utils.py",
+        "renderers/hf.py",
+        "renderers/params.py"
+      ],
+      "extracted": [
+        "vendor/vllm/extracted/chat_utils.py",
+        "vendor/vllm/extracted/hf_renderer.py",
+        "vendor/vllm/extracted/template_format.py"
+      ],
+      "tests": [
+        "tests/test_hf_profiles.py",
+        "tests/test_oracle_basic.py",
+        "tests/test_oracle_tools.py",
+        "tests/test_upstream_parity.py"
+      ]
+    },
+    "minimax-m2.7": {
+      "renderer": "hf",
+      "upstream": [
+        "entrypoints/chat_utils.py",
+        "renderers/hf.py",
+        "renderers/params.py"
+      ],
+      "extracted": [
+        "vendor/vllm/extracted/chat_utils.py",
+        "vendor/vllm/extracted/hf_renderer.py",
+        "vendor/vllm/extracted/template_format.py"
+      ],
+      "tests": ["tests/test_hf_profiles.py"]
+    }
+  }
+}

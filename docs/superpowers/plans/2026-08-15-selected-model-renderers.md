@@ -210,10 +210,10 @@ def test_unknown_model_never_falls_back(registry):
 **Interfaces:**
 - Produces: a complete upstream file → extracted file → profile → test mapping.
 
-- [ ] **Step 1: Test missing source hashes, unsupported renderer names, uncovered profiles, missing tests, and unauthorized HF fallback.**
-- [ ] **Step 2: Confirm each malformed fixture fails with a precise assertion.**
-- [ ] **Step 3: Populate coverage entries for all seven profiles and both DeepSeek specialized closures.**
-- [ ] **Step 4: Run provenance/core tests and commit `test: enforce renderer provenance and coverage`.**
+- [x] **Step 1: Test missing source hashes, unsupported renderer names, uncovered profiles, missing tests, and unauthorized HF fallback.**
+- [x] **Step 2: Confirm each malformed fixture fails with a precise assertion.**
+- [x] **Step 3: Populate coverage entries for all seven profiles and both DeepSeek specialized closures.**
+- [x] **Step 4: Run provenance/core tests and commit `test: enforce renderer provenance and coverage`.**
 
 ### Task 10: Per-Model Layered Result Generation
 
