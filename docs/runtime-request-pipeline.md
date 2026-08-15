@@ -4,6 +4,9 @@
 `rendered_text`、`token_ids` 和 `token_ids_length`；同时说明哪些逻辑由所有模型
 共用、哪些逻辑按模型分叉，以及新增模型时应该增加配置、资产还是专用代码。
 
+如果希望跟随一份包含 reasoning、tools 和 tool result 的具体请求逐步阅读，请参见
+[`request-pipeline-walkthrough.md`](request-pipeline-walkthrough.md)。
+
 ## 总览
 
 以 GLM-5.2 为例：
