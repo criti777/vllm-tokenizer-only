@@ -1,0 +1,58 @@
+{
+  "counts": {
+    "combinatorial": {
+      "error": 0,
+      "ok": 2000,
+      "total": 2000
+    },
+    "handwritten": {
+      "error": 30,
+      "ok": 270,
+      "total": 300
+    },
+    "ultrachat": {
+      "error": 0,
+      "ok": 1000,
+      "total": 1000
+    }
+  },
+  "dependencies": {
+    "huggingface-hub": "1.7.1",
+    "jinja2": "3.1.6",
+    "pydantic": "2.12.5",
+    "tiktoken": "0.12.0",
+    "tokenizers": "0.22.2",
+    "transformers": "5.13.1"
+  },
+  "files": {
+    "combinatorial.jsonl": {
+      "sha256": "af5fee774c86360428e7431342f1ad97afad0fde640b70ad0c7043b88a55dba7",
+      "size": 3085321
+    },
+    "handwritten.jsonl": {
+      "sha256": "c3dbee96a4f251c9c7a6fd807738b0251f00b71b93a3263aa8a71238e567a603",
+      "size": 758391
+    },
+    "ultrachat.jsonl.gz": {
+      "content_sha256": "19df6e4bb0f8fe937762b6704b308c3c42f24cb5c65e660e1a31f544cad3b946",
+      "sha256": "489b3ce61ef4d961d2d51547040f7371d21faaec5e21b5acc37845b0508218fa",
+      "size": 2071077
+    }
+  },
+  "model": {
+    "id": "deepseek-ai/DeepSeek-V4-Flash",
+    "revision": "60d8d70770c6776ff598c94bb586a859a38244f1"
+  },
+  "oracle_version": "0.1.0",
+  "profile_id": "deepseek-v4",
+  "renderer": "deepseek_v4",
+  "request_model_override": "deepseek-ai/DeepSeek-V4-Flash",
+  "schema_version": 2,
+  "selection": {
+    "ultrachat_limit": 1000
+  },
+  "vllm": {
+    "commit": "568afb3a13806beb53bb2e6bd518269357b237c0",
+    "tag": "v0.26.0"
+  }
+}
