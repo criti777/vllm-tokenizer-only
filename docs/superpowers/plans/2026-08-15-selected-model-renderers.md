@@ -194,10 +194,10 @@ def test_unknown_model_never_falls_back(registry):
 **Interfaces:**
 - Produces: text placeholders where vLLM determines them before processing, otherwise `processor_required`.
 
-- [ ] **Step 1: Test image URL, data URL, mixed text/image order, multiple media parts, and processor-dependent profiles without fetching media.**
-- [ ] **Step 2: Confirm current behavior fails or reports the old `unsupported_multimodal` stage.**
-- [ ] **Step 3: Implement explicit per-profile placeholder policy and stable `processor_required`; assert HTTP clients are never called.**
-- [ ] **Step 4: Run all selected multimodal boundary tests and commit `feat: define multimodal text-only boundary`.**
+- [x] **Step 1: Test image URL, data URL, mixed text/image order, multiple media parts, and processor-dependent profiles without fetching media.**
+- [x] **Step 2: Confirm current behavior fails or reports the old `unsupported_multimodal` stage.**
+- [x] **Step 3: Implement explicit per-profile placeholder policy and stable `processor_required`; assert HTTP clients are never called.**
+- [x] **Step 4: Run all selected multimodal boundary tests and commit `feat: define multimodal text-only boundary`.**
 
 ### Task 9: Coverage and Provenance Gate
 

@@ -24,7 +24,7 @@
     "revision": "60d8d70770c6776ff598c94bb586a859a38244f1",
     "renderer": "deepseek_v4",
     "asset_manifest": "models/manifests/deepseek-v4.json",
-    "capabilities": {"tools": true, "thinking": true, "content_parts": true}
+    "capabilities": {"tools": true, "thinking": true, "content_parts": false}
   },
   {
     "profile_id": "kimi-k2.6",

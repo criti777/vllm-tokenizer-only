@@ -22,6 +22,33 @@ from .renderers import HFRenderer, build_renderer
 
 PROJECT_ROOT = Path(__file__).parents[2]
 DEFAULT_PROFILES = PROJECT_ROOT / "models" / "profiles.json"
+_MEDIA_TYPES = {
+    "image",
+    "image_url",
+    "input_image",
+    "video",
+    "video_url",
+    "audio",
+    "audio_url",
+    "input_audio",
+}
+
+
+def _contains_media(messages: object) -> bool:
+    if not isinstance(messages, list):
+        return False
+    for message in messages:
+        if not isinstance(message, Mapping):
+            continue
+        content = message.get("content")
+        if not isinstance(content, list):
+            continue
+        if any(
+            isinstance(part, Mapping) and part.get("type") in _MEDIA_TYPES
+            for part in content
+        ):
+            return True
+    return False
 
 
 class TextOracle:
@@ -73,6 +100,25 @@ class TextOracle:
         request_hash = canonical_json_sha256(request_dict)
         profile_id = self.profile.profile_id if self.profile else None
         renderer_name = self.profile.renderer if self.profile else None
+        if (
+            self.profile is not None
+            and _contains_media(request_dict.get("messages"))
+            and not self.profile.capabilities.get("content_parts", False)
+        ):
+            return OracleResult.failure(
+                case_id=case_id,
+                request_sha256=request_hash,
+                model_profile=profile_id,
+                renderer=renderer_name,
+                error=OracleError(
+                    stage="processor_required",
+                    type="multimodal_processor_required",
+                    message=(
+                        f"{profile_id} requires a model processor to resolve media "
+                        "content into input tokens"
+                    ),
+                ),
+            )
         request_model = request_dict.get("model")
         if self.profile is not None and isinstance(request_model, str):
             try:
@@ -128,8 +174,8 @@ class TextOracle:
                 model_profile=profile_id,
                 renderer=renderer_name,
                 error=OracleError(
-                    stage="message_normalization",
-                    type="unsupported_multimodal",
+                    stage="processor_required",
+                    type="multimodal_processor_required",
                     message=str(error),
                 ),
             )
