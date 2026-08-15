@@ -532,6 +532,8 @@ DeepSeek 专用路径、多模态边界、来源追踪、确定性 gzip、结果
 
 ## 进一步阅读
 
+- `docs/runtime-request-pipeline.md`：按运行顺序解释请求链路、公共规范化、模型分叉和
+  新模型维护方式；
 - `vendor/vllm/EXTRACTION.md`：vLLM 提取边界与文件映射；
 - `vendor/vllm/coverage.json`：机器可读的 profile 覆盖门禁；
 - `docs/superpowers/specs/2026-08-14-vllm-text-input-oracle-design.md`：最初的
